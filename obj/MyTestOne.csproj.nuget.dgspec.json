@@ -48,6 +48,10 @@
               "target": "Package",
               "version": "[11.3.3, )"
             },
+            "Avalonia.Controls.ColorPicker": {
+              "target": "Package",
+              "version": "[11.3.3, )"
+            },
             "Avalonia.Desktop": {
               "target": "Package",
               "version": "[11.3.3, )"
