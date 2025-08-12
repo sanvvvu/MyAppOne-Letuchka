@@ -3,6 +3,7 @@
         xmlns:vm="using:MyTestOne.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="using:MyTestOne.Models"
         mc:Ignorable="d"
         x:DataType="vm:MainWindowViewModel"
         x:Class="MyTestOne.Views.MainWindow"
@@ -14,86 +15,88 @@
 
     <Grid ColumnDefinitions="300,*" RowDefinitions="Auto,*">
         <!-- Панель управления -->
-        <StackPanel Grid.Column="0" Grid.RowSpan="2" Background="#f0f0f0" Padding="15,15,15,15">
-            <!-- Переключение фигур -->
-            <TextBlock Text="Выберите фигуру:" Margin="0,0,0,10" FontWeight="Bold"/>
-            <StackPanel Orientation="Horizontal" Spacing="10">
-                <Button Content="Прямоугольник" Command="{Binding SwitchToRectangleCommand}" Width="120"/>
-                <Button Content="Круг" Command="{Binding SwitchToCircleCommand}" Width="120"/>
-            </StackPanel>
+        <StackPanel Grid.Column="0" Grid.RowSpan="2" Background="#f0f0f0">
+            <StackPanel Margin="15">
+                <!-- Переключение фигур -->
+                <TextBlock Text="Выберите фигуру:" Margin="0,0,0,10" FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Button Content="Прямоугольник" Command="{Binding SwitchToRectangleCommand}" Width="120"/>
+                    <Button Content="Круг" Command="{Binding SwitchToCircleCommand}" Width="120"/>
+                </StackPanel>
 
-            <!-- Общие параметры -->
-            <TextBlock Text="Общие параметры:" Margin="0,20,0,10" FontWeight="Bold"/>
-            <TextBlock Text="Цвет фигуры:"/>
-            <Border Background="{Binding CurrentSettings.ShapeColor}" Height="30" Margin="0,5,0,15"/>
-            
-            <TextBlock Text="Текст:" Margin="0,10,0,0"/>
-            <TextBox Text="{Binding CurrentSettings.Text}" Width="200"/>
-            
-            <TextBlock Text="Цвет текста:" Margin="0,10,0,0"/>
-            <Border Background="{Binding CurrentSettings.TextColor}" Height="30" Margin="0,5,0,15"/>
+                <!-- Общие параметры -->
+                <TextBlock Text="Общие параметры:" Margin="0,20,0,10" FontWeight="Bold"/>
+                <TextBlock Text="Цвет фигуры:"/>
+                <Border Background="{Binding CurrentSettings.ShapeColor}" Height="30" Margin="0,5,0,15"/>
+                
+                <TextBlock Text="Текст:" Margin="0,10,0,0"/>
+                <TextBox Text="{Binding CurrentSettings.Text}" Width="200"/>
+                
+                <TextBlock Text="Цвет текста:" Margin="0,10,0,0"/>
+                <Border Background="{Binding CurrentSettings.TextColor}" Height="30" Margin="0,5,0,15"/>
 
-            <!-- Специфичные параметры -->
-            <TextBlock Text="Специфичные параметры:" Margin="0,20,0,10" FontWeight="Bold"/>
-            
-            <!-- Для прямоугольника -->
-            <StackPanel IsVisible="{Binding #rectPanel.IsVisible}">
-                <TextBlock Text="Ширина:"/>
-                <Slider Minimum="50" Maximum="400" Value="{Binding CurrentSettings.Width}" Width="200"/>
+                <!-- Специфичные параметры -->
+                <TextBlock Text="Специфичные параметры:" Margin="0,20,0,10" FontWeight="Bold"/>
                 
-                <TextBlock Text="Высота:" Margin="0,10,0,0"/>
-                <Slider Minimum="50" Maximum="400" Value="{Binding CurrentSettings.Height}" Width="200"/>
+                <!-- Для прямоугольника -->
+                <StackPanel x:Name="rectPanel" IsVisible="{Binding CurrentShapeType, Converter={x:Static ObjectConverters.IsEqual}, ConverterParameter={x:Static models:ShapeType.Rectangle}}">
+                    <TextBlock Text="Ширина:"/>
+                    <Slider Minimum="50" Maximum="400" Value="{Binding RectangleSettings.Width}" Width="200"/>
+                    
+                    <TextBlock Text="Высота:" Margin="0,10,0,0"/>
+                    <Slider Minimum="50" Maximum="400" Value="{Binding RectangleSettings.Height}" Width="200"/>
+                    
+                    <TextBlock Text="Поворот (градусы):" Margin="0,10,0,0"/>
+                    <Slider Minimum="0" Maximum="360" Value="{Binding RectangleSettings.Rotation}" Width="200"/>
+                </StackPanel>
                 
-                <TextBlock Text="Поворот (градусы):" Margin="0,10,0,0"/>
-                <Slider Minimum="0" Maximum="360" Value="{Binding CurrentSettings.Rotation}" Width="200"/>
-            </StackPanel>
-            
-            <!-- Для круга -->
-            <StackPanel x:Name="circlePanel" IsVisible="{Binding #rectPanel.IsVisible, Converter={x:Static BoolConverters.Not}}">
-                <TextBlock Text="Сжатие по X:"/>
-                <Slider Minimum="0.1" Maximum="2.0" Value="{Binding CurrentSettings.ScaleX}" Width="200"/>
-                
-                <TextBlock Text="Сжатие по Y:" Margin="0,10,0,0"/>
-                <Slider Minimum="0.1" Maximum="2.0" Value="{Binding CurrentSettings.ScaleY}" Width="200"/>
+                <!-- Для круга -->
+                <StackPanel x:Name="circlePanel" IsVisible="{Binding CurrentShapeType, Converter={x:Static ObjectConverters.IsEqual}, ConverterParameter={x:Static models:ShapeType.Circle}}">
+                    <TextBlock Text="Сжатие по X:"/>
+                    <Slider Minimum="0.1" Maximum="2.0" Value="{Binding CircleSettings.ScaleX}" Width="200"/>
+                    
+                    <TextBlock Text="Сжатие по Y:" Margin="0,10,0,0"/>
+                    <Slider Minimum="0.1" Maximum="2.0" Value="{Binding CircleSettings.ScaleY}" Width="200"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
         
         <!-- Область отображения -->
         <Border Grid.Column="1" Grid.Row="0" Background="White" Padding="20">
-            <ContentControl Content="{Binding CurrentShapeType}">
+            <ContentControl Content="{Binding}">
                 <ContentControl.ContentTemplate>
                     <DataTemplate>
-                        <Border Width="300" Height="300">
-                            <Canvas>
-                                <Rectangle Fill="{Binding CurrentSettings.ShapeColor}" 
-                                           Width="{Binding CurrentSettings.Width}" 
-                                           Height="{Binding CurrentSettings.Height}"
-                                           RenderTransformOrigin="0.5,0.5"
-                                           IsVisible="{Binding #rectPanel.IsVisible}">
-                                    <Rectangle.RenderTransform>
-                                        <RotateTransform Angle="{Binding CurrentSettings.Rotation}"/>
-                                    </Rectangle.RenderTransform>
-                                    <TextBlock Text="{Binding CurrentSettings.Text}" 
-                                               Foreground="{Binding CurrentSettings.TextColor}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
-                                </Rectangle>
-                                
-                                <Ellipse Fill="{Binding CurrentSettings.ShapeColor}"
-                                         Width="150" Height="150"
-                                         RenderTransformOrigin="0.5,0.5"
-                                         IsVisible="{Binding #circlePanel.IsVisible}">
-                                    <Ellipse.RenderTransform>
-                                        <ScaleTransform ScaleX="{Binding CurrentSettings.ScaleX}" 
-                                                        ScaleY="{Binding CurrentSettings.ScaleY}"/>
-                                    </Ellipse.RenderTransform>
-                                    <TextBlock Text="{Binding CurrentSettings.Text}" 
-                                               Foreground="{Binding CurrentSettings.TextColor}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
-                                </Ellipse>
-                            </Canvas>
-                        </Border>
+                        <Canvas Width="300" Height="300">
+                            <!-- Прямоугольник -->
+                            <Rectangle Fill="{Binding RectangleSettings.ShapeColor}" 
+                                       Width="{Binding RectangleSettings.Width}" 
+                                       Height="{Binding RectangleSettings.Height}"
+                                       RenderTransformOrigin="0.5,0.5"
+                                       IsVisible="{Binding CurrentShapeType, Converter={x:Static ObjectConverters.IsEqual}, ConverterParameter={x:Static models:ShapeType.Rectangle}}">
+                                <Rectangle.RenderTransform>
+                                    <RotateTransform Angle="{Binding RectangleSettings.Rotation}"/>
+                                </Rectangle.RenderTransform>
+                                <TextBlock Text="{Binding RectangleSettings.Text}" 
+                                           Foreground="{Binding RectangleSettings.TextColor}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Rectangle>
+                            
+                            <!-- Круг -->
+                            <Ellipse Fill="{Binding CircleSettings.ShapeColor}"
+                                     Width="150" Height="150"
+                                     RenderTransformOrigin="0.5,0.5"
+                                     IsVisible="{Binding CurrentShapeType, Converter={x:Static ObjectConverters.IsEqual}, ConverterParameter={x:Static models:ShapeType.Circle}}">
+                                <Ellipse.RenderTransform>
+                                    <ScaleTransform ScaleX="{Binding CircleSettings.ScaleX}" 
+                                                    ScaleY="{Binding CircleSettings.ScaleY}"/>
+                                </Ellipse.RenderTransform>
+                                <TextBlock Text="{Binding CircleSettings.Text}" 
+                                           Foreground="{Binding CircleSettings.TextColor}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Ellipse>
+                        </Canvas>
                     </DataTemplate>
                 </ContentControl.ContentTemplate>
             </ContentControl>

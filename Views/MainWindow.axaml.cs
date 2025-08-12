@@ -1,11 +1,22 @@
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
 
-namespace MyTestOne.Views;
-
-public partial class MainWindow : Window
+namespace MyTestOne.Views
 {
-    public MainWindow()
+    public partial class MainWindow : Window
     {
-        InitializeComponent();
+        public MainWindow()
+        {
+            InitializeComponent();
+#if DEBUG
+            this.AttachDevTools(); // Добавляем инструменты разработчика в режиме отладки
+#endif
+        }
+
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
+        }
     }
 }
