@@ -11,8 +11,8 @@ public class MainWindowViewModel : ViewModelBase
     private RectangleSettings _rectangleSettings = new();
     private CircleSettings _circleSettings = new();
     
-    private ShapeSettings _currentSettings;
-    public ShapeSettings CurrentSettings
+    private ShapeSettings? _currentSettings; // Добавляем nullable
+    public ShapeSettings? CurrentSettings
     {
         get => _currentSettings;
         set => this.RaiseAndSetIfChanged(ref _currentSettings, value);
@@ -24,7 +24,8 @@ public class MainWindowViewModel : ViewModelBase
         get => _currentShapeType;
         set
         {
-            if (CurrentSettings != null)
+            // Добавляем проверку на null
+            if (CurrentSettings is not null)
             {
                 if (CurrentShapeType == ShapeType.Rectangle)
                 {

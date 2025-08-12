@@ -58,7 +58,13 @@
         
         <!-- Область отображения -->
         <Border Grid.Column="1" Grid.Row="0" Background="White" Padding="20">
-            <ContentControl Content="{Binding CurrentShapeType, Converter={x:Static services:ShapeRenderer.RenderShape}, ConverterParameter={Binding CurrentSettings}}"/>
+            <ContentControl Content="{Binding CurrentSettings}">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding ., Converter={x:Static services:ShapeRenderer.RenderShape}, ConverterParameter={Binding $parent[ContentControl].DataContext.CurrentShapeType}}"/>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
         </Border>
     </Grid>
 </Window>

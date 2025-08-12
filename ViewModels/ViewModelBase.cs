@@ -7,10 +7,12 @@ namespace MyTestOne.ViewModels;
 
 public class ViewModelBase : ReactiveObject
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
+    // Явно инициализируем событие как null
+    public new event PropertyChangedEventHandler? PropertyChanged = null;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
+        // Добавляем проверку на null перед вызовом
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
