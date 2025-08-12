@@ -1,20 +1,64 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:MyTestOne.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:services="using:MyTestOne.Services"
+        xmlns:models="using:MyTestOne.Models"
         x:Class="MyTestOne.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="MyTestOne">
-
+        Title="MyTestOneLetuchka" Width="800" Height="600">
+    
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid ColumnDefinitions="300,*" RowDefinitions="Auto,*">
+        <!-- Панель управления -->
+        <StackPanel Grid.Column="0" Grid.RowSpan="2" Background="#f0f0f0" Padding="15">
+            <!-- Переключение фигур -->
+            <TextBlock Text="Выберите фигуру:" Margin="0,0,0,10" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button Content="Прямоугольник" Command="{Binding SwitchToRectangleCommand}" Width="120"/>
+                <Button Content="Круг" Command="{Binding SwitchToCircleCommand}" Width="120"/>
+            </StackPanel>
 
+            <!-- Общие параметры -->
+            <TextBlock Text="Общие параметры:" Margin="0,20,0,10" FontWeight="Bold"/>
+            <TextBlock Text="Цвет фигуры:"/>
+            <ColorPicker SelectedColor="{Binding CurrentSettings.ShapeColor}"/>
+            
+            <TextBlock Text="Текст:" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding CurrentSettings.Text}" Width="200"/>
+            
+            <TextBlock Text="Цвет текста:" Margin="0,10,0,0"/>
+            <ColorPicker SelectedColor="{Binding CurrentSettings.TextColor}"/>
+
+            <!-- Специфичные параметры -->
+            <TextBlock Text="Специфичные параметры:" Margin="0,20,0,10" FontWeight="Bold"/>
+            
+            <!-- Для прямоугольника -->
+            <StackPanel IsVisible="{Binding CurrentShapeType, Converter={x:Static ObjectConverters.IsEqualTo}, ConverterParameter={x:Static models:ShapeType.Rectangle}}">
+                <TextBlock Text="Ширина:"/>
+                <Slider Minimum="50" Maximum="400" Value="{Binding CurrentSettings.Width}" Width="200"/>
+                
+                <TextBlock Text="Высота:" Margin="0,10,0,0"/>
+                <Slider Minimum="50" Maximum="400" Value="{Binding CurrentSettings.Height}" Width="200"/>
+                
+                <TextBlock Text="Поворот (градусы):" Margin="0,10,0,0"/>
+                <Slider Minimum="0" Maximum="360" Value="{Binding CurrentSettings.Rotation}" Width="200"/>
+            </StackPanel>
+            
+            <!-- Для круга -->
+            <StackPanel IsVisible="{Binding CurrentShapeType, Converter={x:Static ObjectConverters.IsEqualTo}, ConverterParameter={x:Static models:ShapeType.Circle}}">
+                <TextBlock Text="Сжатие по X:"/>
+                <Slider Minimum="0.1" Maximum="2.0" Value="{Binding CurrentSettings.ScaleX}" Width="200"/>
+                
+                <TextBlock Text="Сжатие по Y:" Margin="0,10,0,0"/>
+                <Slider Minimum="0.1" Maximum="2.0" Value="{Binding CurrentSettings.ScaleY}" Width="200"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <!-- Область отображения -->
+        <Border Grid.Column="1" Grid.Row="0" Background="White" Padding="20">
+            <ContentControl Content="{Binding CurrentShapeType, Converter={x:Static services:ShapeRenderer.RenderShape}, ConverterParameter={Binding CurrentSettings}}"/>
+        </Border>
+    </Grid>
 </Window>
