@@ -1,17 +1,63 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:MyTestOne.ViewModels"
+        xmlns:views="using:MyTestOne.Views"
+        xmlns:conv="using:MyTestOne.Converters"
+        mc:Ignorable="d"
+        x:DataType="vm:MainWindowViewModel"
+        Width="800" Height="600"
         x:Class="MyTestOne.Views.MainWindow"
-        Title="MyTestOne" Width="800" Height="600">
-    
+        Title="Shape Editor">
+
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <StackPanel>
-        <TextBlock Text="Приложение успешно загружено!" 
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontSize="24"/>
-    </StackPanel>
+    <Grid ColumnDefinitions="300,*" Margin="10">
+        <!-- Left Panel - Controls -->
+        <StackPanel Grid.Column="0" Spacing="10">
+            <Button Content="Rectangle" Command="{Binding SwitchToRectangleCommand}"/>
+            <Button Content="Circle" Command="{Binding SwitchToCircleCommand}"/>
+            
+            <Separator/>
+            
+            <TextBlock Text="Shape Color:"/>
+            <ColorPicker Color="{Binding CurrentShape.ShapeColor}"/>
+            
+            <TextBlock Text="Text:"/>
+            <TextBox Text="{Binding CurrentShape.Text}"/>
+            
+            <TextBlock Text="Text Color:"/>
+            <ColorPicker Color="{Binding CurrentShape.TextColor}"/>
+            
+            <!-- Rectangle Parameters -->
+            <StackPanel IsVisible="{Binding CurrentShapeType, Converter={x:Static conv:ShapeTypeToVisibilityConverter}, ConverterParameter=Rectangle}">
+                <TextBlock Text="Width:"/>
+                <Slider Minimum="50" Maximum="500" Value="{Binding Rectangle.Width}"/>
+                
+                <TextBlock Text="Height:"/>
+                <Slider Minimum="50" Maximum="500" Value="{Binding Rectangle.Height}"/>
+                
+                <TextBlock Text="Rotation (degrees):"/>
+                <Slider Minimum="0" Maximum="360" Value="{Binding Rectangle.Rotation}"/>
+            </StackPanel>
+            
+            <!-- Circle Parameters -->
+            <StackPanel IsVisible="{Binding CurrentShapeType, Converter={x:Static conv:ShapeTypeToVisibilityConverter}, ConverterParameter=Circle}">
+                <TextBlock Text="Scale X:"/>
+                <Slider Minimum="0.1" Maximum="2" Value="{Binding Circle.ScaleX}"/>
+                
+                <TextBlock Text="Scale Y:"/>
+                <Slider Minimum="0.1" Maximum="2" Value="{Binding Circle.ScaleY}"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <!-- Right Panel - Shape Display -->
+        <ContentControl Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <views:ShapeView ShapeSettings="{Binding CurrentShape}" 
+                           ShapeType="{Binding CurrentShapeType}"/>
+        </ContentControl>
+    </Grid>
 </Window>

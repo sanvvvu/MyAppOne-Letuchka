@@ -1,39 +1,44 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Data.Converters;
+using MyTestOne.Converters; // Добавляем using
 using MyTestOne.Models;
 using ReactiveUI;
 using System.Reactive;
 
-namespace MyTestOne.ViewModels;
-
-public class MainWindowViewModel : ViewModelBase
+namespace MyTestOne.ViewModels
 {
-    private ShapeType _currentShapeType;
-    public ShapeType CurrentShapeType
+    public class MainWindowViewModel : ViewModelBase
     {
-        get => _currentShapeType;
-        set => this.RaiseAndSetIfChanged(ref _currentShapeType, value);
-    }
+        // Добавляем статическое поле конвертера
+        public static readonly ShapeTypeToVisibilityConverter ShapeTypeToVisibilityConverter = new();
 
-    public RectangleSettings Rectangle { get; } = new();
-    public CircleSettings Circle { get; } = new();
+        private ShapeType _currentShapeType;
+        public ShapeType CurrentShapeType
+        {
+            get => _currentShapeType;
+            set => this.RaiseAndSetIfChanged(ref _currentShapeType, value);
+        }
 
-    public ShapeSettings CurrentShape => CurrentShapeType == ShapeType.Rectangle ? Rectangle : Circle;
+        public RectangleSettings Rectangle { get; } = new();
+        public CircleSettings Circle { get; } = new();
 
-    public ReactiveCommand<Unit, Unit> SwitchToRectangleCommand { get; }
-    public ReactiveCommand<Unit, Unit> SwitchToCircleCommand { get; }
+        public ShapeSettings CurrentShape => CurrentShapeType == ShapeType.Rectangle ? Rectangle : Circle;
 
-    public MainWindowViewModel()
-    {
-        CurrentShapeType = ShapeType.Rectangle;
+        public ReactiveCommand<Unit, Unit> SwitchToRectangleCommand { get; }
+        public ReactiveCommand<Unit, Unit> SwitchToCircleCommand { get; }
 
-        SwitchToRectangleCommand = ReactiveCommand.Create(() => 
+        public MainWindowViewModel()
         {
             CurrentShapeType = ShapeType.Rectangle;
-        });
-        
-        SwitchToCircleCommand = ReactiveCommand.Create(() => 
-        {
-            CurrentShapeType = ShapeType.Circle;
-        });
+
+            SwitchToRectangleCommand = ReactiveCommand.Create(() => 
+            {
+                CurrentShapeType = ShapeType.Rectangle;
+            });
+            
+            SwitchToCircleCommand = ReactiveCommand.Create(() => 
+            {
+                CurrentShapeType = ShapeType.Circle;
+            });
+        }
     }
 }

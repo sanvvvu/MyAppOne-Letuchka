@@ -46,11 +46,11 @@
           "dependencies": {
             "Avalonia": {
               "target": "Package",
-              "version": "[11.0.0, )"
+              "version": "[11.0.11, )"
             },
             "Avalonia.Desktop": {
               "target": "Package",
-              "version": "[11.0.0, )"
+              "version": "[11.0.11, )"
             },
             "Avalonia.Diagnostics": {
               "target": "Package",
@@ -58,11 +58,11 @@
             },
             "Avalonia.ReactiveUI": {
               "target": "Package",
-              "version": "[11.0.0, )"
+              "version": "[11.0.11, )"
             },
             "Avalonia.Themes.Fluent": {
               "target": "Package",
-              "version": "[11.0.0, )"
+              "version": "[11.0.11, )"
             }
           },
           "imports": [
