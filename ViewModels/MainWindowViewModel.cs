@@ -1,7 +1,6 @@
 ﻿using Avalonia.Media;
 using MyTestOne.Models;
 using ReactiveUI;
-using System;
 using System.Reactive;
 
 namespace MyTestOne.ViewModels;
@@ -15,8 +14,10 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _currentShapeType, value);
     }
 
-    public RectangleSettings RectangleSettings { get; } = new();
-    public CircleSettings CircleSettings { get; } = new();
+    public RectangleSettings Rectangle { get; } = new();
+    public CircleSettings Circle { get; } = new();
+
+    public ShapeSettings CurrentShape => CurrentShapeType == ShapeType.Rectangle ? Rectangle : Circle;
 
     public ReactiveCommand<Unit, Unit> SwitchToRectangleCommand { get; }
     public ReactiveCommand<Unit, Unit> SwitchToCircleCommand { get; }
