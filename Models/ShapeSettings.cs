@@ -5,7 +5,7 @@ namespace MyTestOne.Models;
 
 public class ShapeSettings : INotifyPropertyChanged
 {
-    private Color _shapeColor = Colors.Blue;
+    private Color _shapeColor = Color.FromRgb(74, 134, 232);
     public Color ShapeColor
     {
         get => _shapeColor;
@@ -16,7 +16,7 @@ public class ShapeSettings : INotifyPropertyChanged
         }
     }
 
-    private string _text = "Hello!";
+    private string _text = "Shape Editor";
     public string Text
     {
         get => _text;
