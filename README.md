@@ -1,4 +1,5 @@
-<img width="1536" height="1024" alt="Letuchka" src="https://github.com/user-attachments/assets/d11ad550-b872-46ae-9807-8aa188c24dd7" />
+
+<img width="1536" height="1024" alt="Letuchka1" src="https://github.com/user-attachments/assets/0f7df7cc-456e-42f7-99c5-313f1b5f7cbc" />
 
 ***Общая структура интерфейса***
         Когда приложение запускается, на экране появляется единое окно с названием Shape Editor, иконкой (летучей мыши) и следующими элементами:
