@@ -1,19 +1,14 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Markup.Xaml;
-using Avalonia.Data; // Добавлено для AvaloniaPropertyChangedEventArgs
 using MyTestOne.Models;
 using MyTestOne.Services;
 
 namespace MyTestOne.Views;
 
-public partial class ShapeView : UserControl
+public class ShapeView : UserControl
 {
-    public ShapeView()
-    {
-        InitializeComponent();
-    }
-
     public static readonly StyledProperty<ShapeSettings> ShapeSettingsProperty =
         AvaloniaProperty.Register<ShapeView, ShapeSettings>(nameof(ShapeSettings));
 
@@ -32,16 +27,35 @@ public partial class ShapeView : UserControl
         set => SetValue(ShapeTypeProperty, value);
     }
 
+    public ShapeView()
+    {
+        InitializeComponent();
+    }
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
 
         if (change.Property == ShapeSettingsProperty || change.Property == ShapeTypeProperty)
         {
-            if (ShapeSettings != null)
-            {
-                Content = ShapeRenderer.RenderShape(ShapeSettings, ShapeType);
-            }
+            UpdateContent();
+        }
+    }
+
+    private void UpdateContent()
+    {
+        if (ShapeSettings != null)
+        {
+            Content = ShapeRenderer.RenderShape(ShapeSettings, ShapeType);
+        }
+        else
+        {
+            Content = null;
         }
     }
 }
