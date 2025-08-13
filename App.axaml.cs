@@ -10,7 +10,7 @@ public class App : Application
 {
     public override void Initialize()
     {
-        // Упрощенная инициализация без XAML Load
+        AvaloniaXamlLoader.Load(this);
     }
     
     public override void OnFrameworkInitializationCompleted()
