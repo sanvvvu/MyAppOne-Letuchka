@@ -1,28 +1,31 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using MyTestOne.ViewModels; // Добавлено
-using MyTestOne.Views; // Добавлено
+using MyTestOne.ViewModels;
+using MyTestOne.Views;
 
 namespace MyTestOne;
 
-public partial class App : Application
+public class App : Application
 {
     public override void Initialize()
     {
-        AvaloniaXamlLoader.Load(this);
+        // Упрощенная инициализация без XAML Load
     }
-
+    
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowViewModel()
-            };
+            // Создаем главное окно вручную
+            var mainWindow = new MainWindow();
+            mainWindow.DataContext = new MainWindowViewModel();
+            desktop.MainWindow = mainWindow;
+            
+            // Показываем окно
+            mainWindow.Show();
         }
-
+        
         base.OnFrameworkInitializationCompleted();
     }
 }
