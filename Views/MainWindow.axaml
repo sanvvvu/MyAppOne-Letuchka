@@ -2,62 +2,94 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="using:MyTestOne.ViewModels"
-        xmlns:views="using:MyTestOne.Views"
-        xmlns:conv="using:MyTestOne.Converters"
+        xmlns:vm="clr-namespace:MyTestOne.ViewModels;assembly=MyTestOne"
+        xmlns:views="clr-namespace:MyTestOne.Views;assembly=MyTestOne"
+        xmlns:conv="clr-namespace:MyTestOne.Converters;assembly=MyTestOne"
         mc:Ignorable="d"
         x:DataType="vm:MainWindowViewModel"
-        Width="800" Height="600"
-        x:Class="MyTestOne.Views.MainWindow"
-        Title="Shape Editor">
+        Width="900" Height="650"
+        Title="Shape Editor"
+        FontFamily="Segoe UI"
+        Icon="avares://MyTestOne/Assets/Letuchka.ico">
+
+    <Window.Resources>
+        <conv:ShapeTypeToVisibilityConverter x:Key="ShapeConverter"/>
+    </Window.Resources>
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="300,*" Margin="10">
-        <!-- Left Panel - Controls -->
-        <StackPanel Grid.Column="0" Spacing="10">
-            <Button Content="Rectangle" Command="{Binding SwitchToRectangleCommand}"/>
-            <Button Content="Circle" Command="{Binding SwitchToCircleCommand}"/>
+    <Grid ColumnDefinitions="350,*" Margin="15" RowDefinitions="Auto,*">
+        <!-- Header -->
+        <TextBlock Text="Shape Editor" FontSize="24" FontWeight="Bold" 
+                   Grid.ColumnSpan="2" Margin="0 0 0 20"/>
+        
+        <!-- Control Panel -->
+        <StackPanel Grid.Row="1" Grid.Column="0" Spacing="10" Margin="0 0 20 0">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button Content="Rectangle" Command="{Binding SwitchToRectangleCommand}"
+                        Width="120" HorizontalAlignment="Left"/>
+                <Button Content="Circle" Command="{Binding SwitchToCircleCommand}"
+                        Width="120" HorizontalAlignment="Left"/>
+            </StackPanel>
             
             <Separator/>
             
-            <TextBlock Text="Shape Color:"/>
-            <ColorPicker Color="{Binding CurrentShape.ShapeColor}"/>
-            
-            <TextBlock Text="Text:"/>
-            <TextBox Text="{Binding CurrentShape.Text}"/>
-            
-            <TextBlock Text="Text Color:"/>
-            <ColorPicker Color="{Binding CurrentShape.TextColor}"/>
+            <Border Classes="group">
+                <StackPanel>
+                    <TextBlock Text="Shape Color:" FontWeight="Bold"/>
+                    <ColorPicker Color="{Binding CurrentShape.ShapeColor}" Height="30"/>
+                    
+                    <TextBlock Text="Text:" FontWeight="Bold" Margin="0 15 0 0"/>
+                    <TextBox Text="{Binding CurrentShape.Text}" FontSize="14" Padding="5"/>
+                    
+                    <TextBlock Text="Text Color:" FontWeight="Bold" Margin="0 15 0 0"/>
+                    <ColorPicker Color="{Binding CurrentShape.TextColor}" Height="30"/>
+                </StackPanel>
+            </Border>
             
             <!-- Rectangle Parameters -->
-            <StackPanel IsVisible="{Binding CurrentShapeType, Converter={x:Static conv:ShapeTypeToVisibilityConverter}, ConverterParameter=Rectangle}">
-                <TextBlock Text="Width:"/>
-                <Slider Minimum="50" Maximum="500" Value="{Binding Rectangle.Width}"/>
-                
-                <TextBlock Text="Height:"/>
-                <Slider Minimum="50" Maximum="500" Value="{Binding Rectangle.Height}"/>
-                
-                <TextBlock Text="Rotation (degrees):"/>
-                <Slider Minimum="0" Maximum="360" Value="{Binding Rectangle.Rotation}"/>
-            </StackPanel>
+            <Border Classes="group" IsVisible="{Binding CurrentShapeType, 
+                                Converter={StaticResource ShapeConverter}, 
+                                ConverterParameter=Rectangle}">
+                <StackPanel>
+                    <TextBlock Text="Rectangle Settings" FontWeight="Bold" Margin="0 0 0 10"/>
+                    
+                    <TextBlock Text="Width: {Binding Rectangle.Width, StringFormat='{}{0:F0}px'}"/>
+                    <Slider Minimum="50" Maximum="500" Value="{Binding Rectangle.Width}"/>
+                    
+                    <TextBlock Text="Height: {Binding Rectangle.Height, StringFormat='{}{0:F0}px'}"/>
+                    <Slider Minimum="50" Maximum="500" Value="{Binding Rectangle.Height}"/>
+                    
+                    <TextBlock Text="Rotation: {Binding Rectangle.Rotation, StringFormat='{}{0:F0}°'}"/>
+                    <Slider Minimum="0" Maximum="360" Value="{Binding Rectangle.Rotation}"/>
+                </StackPanel>
+            </Border>
             
             <!-- Circle Parameters -->
-            <StackPanel IsVisible="{Binding CurrentShapeType, Converter={x:Static conv:ShapeTypeToVisibilityConverter}, ConverterParameter=Circle}">
-                <TextBlock Text="Scale X:"/>
-                <Slider Minimum="0.1" Maximum="2" Value="{Binding Circle.ScaleX}"/>
-                
-                <TextBlock Text="Scale Y:"/>
-                <Slider Minimum="0.1" Maximum="2" Value="{Binding Circle.ScaleY}"/>
-            </StackPanel>
+            <Border Classes="group" IsVisible="{Binding CurrentShapeType, 
+                                Converter={StaticResource ShapeConverter}, 
+                                ConverterParameter=Circle}">
+                <StackPanel>
+                    <TextBlock Text="Circle Settings" FontWeight="Bold" Margin="0 0 0 10"/>
+                    
+                    <TextBlock Text="Scale X: {Binding Circle.ScaleX, StringFormat='{}{0:F1}'}"/>
+                    <Slider Minimum="0.1" Maximum="2" Value="{Binding Circle.ScaleX}"/>
+                    
+                    <TextBlock Text="Scale Y: {Binding Circle.ScaleY, StringFormat='{}{0:F1}'}"/>
+                    <Slider Minimum="0.1" Maximum="2" Value="{Binding Circle.ScaleY}"/>
+                </StackPanel>
+            </Border>
         </StackPanel>
         
-        <!-- Right Panel - Shape Display -->
-        <ContentControl Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <views:ShapeView ShapeSettings="{Binding CurrentShape}" 
-                           ShapeType="{Binding CurrentShapeType}"/>
-        </ContentControl>
+        <!-- Preview Area -->
+        <Border Grid.Row="1" Grid.Column="1" Background="#f0f0f0" CornerRadius="8"
+                Padding="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center">
+                <views:ShapeView ShapeSettings="{Binding CurrentShape}" 
+                                ShapeType="{Binding CurrentShapeType}"/>
+            </ContentControl>
+        </Border>
     </Grid>
 </Window>
