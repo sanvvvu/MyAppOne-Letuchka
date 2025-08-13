@@ -1,4 +1,5 @@
-<img width="1536" height="1024" alt="Letuchka3" src="https://github.com/user-attachments/assets/97199e14-4897-424b-8908-522f01eb63d6" />
+
+<img width="1536" height="1024" alt="477602878-97199e14-4897-424b-8908-522f01eb63d61" src="https://github.com/user-attachments/assets/31c11bba-0d07-4ecb-90e0-6cd5cc46d4ae" />
 
 
 ***Общая структура интерфейса***
