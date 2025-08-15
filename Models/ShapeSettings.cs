@@ -16,7 +16,7 @@ public class ShapeSettings : INotifyPropertyChanged
         }
     }
 
-    private string _text = "Shape Editor";
+    private string _text = "";
     public string Text
     {
         get => _text;
