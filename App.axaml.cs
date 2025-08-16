@@ -6,26 +6,23 @@ using MyTestOne.Views;
 
 namespace MyTestOne;
 
-public class App : Application
+public partial class App : Application
 {
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
     }
-    
+
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // Создаем главное окно вручную
-            var mainWindow = new MainWindow();
-            mainWindow.DataContext = new MainWindowViewModel();
-            desktop.MainWindow = mainWindow;
-            
-            // Показываем окно
-            mainWindow.Show();
+            desktop.MainWindow = new MainWindow
+            {
+                DataContext = new MainWindowViewModel(),
+            };
         }
-        
+
         base.OnFrameworkInitializationCompleted();
     }
 }
