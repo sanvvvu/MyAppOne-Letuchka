@@ -9,7 +9,13 @@ public class MainWindowViewModel : ViewModelBase
     public ShapeType CurrentShapeType
     {
         get => _currentShapeType;
-        set => SetField(ref _currentShapeType, value);
+        set
+        {
+            if (SetField(ref _currentShapeType, value))
+            {
+                OnPropertyChanged(nameof(CurrentShape));
+            }
+        }
     }
 
     public RectangleSettings Rectangle { get; } = new();
