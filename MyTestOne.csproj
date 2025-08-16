@@ -1,12 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <DebugType>portable</DebugType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.11" />
@@ -14,33 +17,9 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.11" />
     <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.0.11" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.11" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
-    <AvaloniaResource Include="Views\MainWindow.axaml" />
-    <AvaloniaResource Include="Views\ShapeView.axaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="App.axaml.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="ViewLocator.cs" />
-    
-    <Compile Include="Models\CircleSettings.cs" />
-    <Compile Include="Models\RectangleSettings.cs" />
-    <Compile Include="Models\ShapeSettings.cs" />
-    <Compile Include="Models\ShapeType.cs" />
-    
-    <Compile Include="Converters\ShapeTypeToVisibilityConverter.cs" />
-    
-    <Compile Include="Services\ShapeRenderer.cs" />
-    
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\RelayCommand.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
-    
-    <Compile Include="Views\MainWindow.axaml.cs" />
-    <Compile Include="Views\ShapeView.axaml.cs" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.11">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>
