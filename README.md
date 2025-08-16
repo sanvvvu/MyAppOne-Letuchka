@@ -1,5 +1,6 @@
 
-<img width="1536" height="1024" alt="477602878-97199e14-4897-424b-8908-522f01eb63d61" src="https://github.com/user-attachments/assets/31c11bba-0d07-4ecb-90e0-6cd5cc46d4ae" />
+<img width="1121" height="847" alt="image" src="https://github.com/user-attachments/assets/3670c82c-54cb-41bc-936a-3a424ec41ef2" />
+
 
 
 ***Общая структура интерфейса***
