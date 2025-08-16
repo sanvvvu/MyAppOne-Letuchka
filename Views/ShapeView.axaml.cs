@@ -7,7 +7,7 @@ using MyTestOne.Services;
 
 namespace MyTestOne.Views;
 
-public class ShapeView : UserControl
+public partial class ShapeView : UserControl
 {
     public static readonly StyledProperty<ShapeSettings> ShapeSettingsProperty =
         AvaloniaProperty.Register<ShapeView, ShapeSettings>(nameof(ShapeSettings));
