@@ -6,6 +6,7 @@
         xmlns:views="clr-namespace:MyTestOne.Views;assembly=MyTestOne"
         xmlns:conv="clr-namespace:MyTestOne.Converters;assembly=MyTestOne"
         mc:Ignorable="d"
+        x:Class="MyTestOne.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Width="900" Height="650"
         Title="Shape Editor"
@@ -56,13 +57,13 @@
                 <StackPanel>
                     <TextBlock Text="Rectangle Settings" FontWeight="Bold" Margin="0 0 0 10"/>
                     
-                    <TextBlock Text="Width: {Binding Rectangle.Width, StringFormat='{}{0:F0}px'}"/>
+                    <TextBlock Text="{Binding Rectangle.Width, StringFormat='Width: {0:F0}px'}"/>
                     <Slider Minimum="50" Maximum="500" Value="{Binding Rectangle.Width}"/>
                     
-                    <TextBlock Text="Height: {Binding Rectangle.Height, StringFormat='{}{0:F0}px'}"/>
+                    <TextBlock Text="{Binding Rectangle.Height, StringFormat='Height: {0:F0}px'}"/>
                     <Slider Minimum="50" Maximum="500" Value="{Binding Rectangle.Height}"/>
                     
-                    <TextBlock Text="Rotation: {Binding Rectangle.Rotation, StringFormat='{}{0:F0}°'}"/>
+                    <TextBlock Text="{Binding Rectangle.Rotation, StringFormat='Rotation: {0:F0}°'}"/>
                     <Slider Minimum="0" Maximum="360" Value="{Binding Rectangle.Rotation}"/>
                 </StackPanel>
             </Border>
@@ -74,10 +75,10 @@
                 <StackPanel>
                     <TextBlock Text="Circle Settings" FontWeight="Bold" Margin="0 0 0 10"/>
                     
-                    <TextBlock Text="Scale X: {Binding Circle.ScaleX, StringFormat='{}{0:F1}'}"/>
+                    <TextBlock Text="{Binding Circle.ScaleX, StringFormat='Scale X: {0:F1}'}"/>
                     <Slider Minimum="0.1" Maximum="2" Value="{Binding Circle.ScaleX}"/>
                     
-                    <TextBlock Text="Scale Y: {Binding Circle.ScaleY, StringFormat='{}{0:F1}'}"/>
+                    <TextBlock Text="{Binding Circle.ScaleY, StringFormat='Scale Y: {0:F1}'}"/>
                     <Slider Minimum="0.1" Maximum="2" Value="{Binding Circle.ScaleY}"/>
                 </StackPanel>
             </Border>
@@ -85,11 +86,13 @@
         
         <!-- Preview Area -->
         <Border Grid.Row="1" Grid.Column="1" Background="#f0f0f0" CornerRadius="8"
-                Padding="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center">
-                <views:ShapeView ShapeSettings="{Binding CurrentShape}" 
-                                ShapeType="{Binding CurrentShapeType}"/>
-            </ContentControl>
+                Padding="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                ClipToBounds="False">
+            <Viewbox>
+                <views:ShapeView Width="500" Height="500"
+                                 ShapeSettings="{Binding CurrentShape}" 
+                                 ShapeType="{Binding CurrentShapeType}"/>
+            </Viewbox>
         </Border>
     </Grid>
 </Window>
